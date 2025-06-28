@@ -77,17 +77,7 @@ export function RedditHeader() {
                     </Link>
                 </div>
 
-                {/* Navegação Principal - Oculta em mobile */}
-                <div className="hidden lg:flex items-center space-x-1 ml-4 xl:ml-6">
-                    <Button variant="ghost" size="sm" className="flex items-center space-x-1 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1">
-                        <Home className="h-4 w-4" />
-                        <span className="text-sm">Home</span>
-                    </Button>
-                    <Button variant="ghost" size="sm" className="flex items-center space-x-1 hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1">
-                        <TrendingUp className="h-4 w-4" />
-                        <span className="text-sm">Popular</span>
-                    </Button>
-                </div>
+
 
                 {/* Barra de Busca */}
                 <div className="flex-1 max-w-2xl mx-2 sm:mx-4">
@@ -105,24 +95,29 @@ export function RedditHeader() {
 
                 {/* Ações da Direita */}
                 <div className="flex items-center space-x-1 flex-shrink-0">
-                    {/* Botão Criar Post - Oculto em mobile muito pequeno */}
-                    <Button size="sm" className="hidden md:flex items-center space-x-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full px-3 lg:px-4 text-sm">
-                        <Plus className="h-3 w-3 lg:h-4 lg:w-4" />
-                        <span className="hidden lg:block">Criar</span>
-                    </Button>
+                    {/* Botões apenas para usuários logados */}
+                    {auth.user && (
+                        <>
+                            {/* Botão Criar Post - Oculto em mobile muito pequeno */}
+                            <Button size="sm" className="hidden md:flex items-center space-x-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full px-3 lg:px-4 text-sm">
+                                <Plus className="h-3 w-3 lg:h-4 lg:w-4" />
+                                <span className="hidden lg:block">Criar</span>
+                            </Button>
 
-                    {/* Botão Criar apenas ícone em mobile */}
-                    <Button size="sm" className="md:hidden bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full p-2">
-                        <Plus className="h-4 w-4" />
-                    </Button>
+                            {/* Botão Criar apenas ícone em mobile */}
+                            <Button size="sm" className="md:hidden bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full p-2">
+                                <Plus className="h-4 w-4" />
+                            </Button>
 
-                    {/* Ícones de Notificação - Ocultos em mobile muito pequeno */}
-                    <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-                        <MessageSquare className="h-3 w-3 lg:h-4 lg:w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-                        <Bell className="h-3 w-3 lg:h-4 lg:w-4" />
-                    </Button>
+                            {/* Ícones de Notificação - Ocultos em mobile muito pequeno */}
+                            <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                                <MessageSquare className="h-3 w-3 lg:h-4 lg:w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
+                                <Bell className="h-3 w-3 lg:h-4 lg:w-4" />
+                            </Button>
+                        </>
+                    )}
 
                     {/* Menu do Usuário */}
                     {auth.user ? (

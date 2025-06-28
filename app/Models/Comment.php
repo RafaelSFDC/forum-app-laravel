@@ -59,6 +59,11 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
+    }
+
     public function votes(): MorphMany
     {
         return $this->morphMany(Vote::class, 'votable');

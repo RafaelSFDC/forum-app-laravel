@@ -259,7 +259,7 @@ export default function ForumIndex({ posts, topics, currentSort, currentTopic, c
                                                     </div>
 
                                                     <h3 className="font-medium text-sm sm:text-lg mb-1.5 sm:mb-2 text-gray-900 dark:text-white hover:text-[#FF4500] cursor-pointer transition-colors line-clamp-2">
-                                                        <Link href={`/posts/${post.slug}`}>
+                                                        <Link href={`/post/${post.slug}`}>
                                                             {post.title}
                                                         </Link>
                                                     </h3>
