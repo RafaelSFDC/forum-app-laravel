@@ -182,6 +182,32 @@ php artisan migrate:fresh --seed
 php artisan queue:work
 ```
 
+## 🐳 Deploy com Docker
+
+Este projeto inclui configuração completa para Docker e deploy no Koyeb:
+
+### Deploy no Koyeb
+```bash
+# Executar script de deploy
+chmod +x scripts/deploy-koyeb.sh
+./scripts/deploy-koyeb.sh
+```
+
+### Teste Local com Docker
+```bash
+# Build da imagem
+chmod +x scripts/build-docker.sh
+./scripts/build-docker.sh
+
+# Executar com Docker Compose
+docker-compose up
+
+# Ou executar diretamente
+docker run -p 8080:8080 forum-app:latest
+```
+
+📖 **Consulte [DOCKER.md](DOCKER.md) para instruções detalhadas de deploy no Koyeb.**
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -193,6 +219,11 @@ forum-app/
 ├── database/
 │   ├── migrations/          # Migrações do banco
 │   └── seeders/            # Seeders para dados iniciais
+├── docker/                 # Configurações Docker
+│   ├── nginx.conf          # Configuração Nginx
+│   ├── default.conf        # Virtual host
+│   ├── supervisord.conf    # Supervisor config
+│   └── entrypoint.sh       # Script de inicialização
 ├── resources/
 │   ├── js/                 # Código React/TypeScript
 │   │   ├── components/     # Componentes React
@@ -202,7 +233,11 @@ forum-app/
 ├── routes/
 │   ├── web.php            # Rotas web
 │   └── auth.php           # Rotas de autenticação
-└── tests/                 # Testes automatizados
+├── scripts/               # Scripts de automação
+├── tests/                 # Testes automatizados
+├── Dockerfile             # Configuração Docker
+├── docker-compose.yml     # Docker Compose
+└── koyeb.yml             # Configuração Koyeb
 ```
 
 ## 🤝 Contribuição

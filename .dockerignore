@@ -1,0 +1,74 @@
+# Arquivos de desenvolvimento
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.env
+.env.*
+!.env.example
+
+# Dependências
+node_modules
+vendor
+
+# Cache e logs
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/app/public/*
+bootstrap/cache/*
+.phpunit.result.cache
+
+# Build artifacts
+public/build
+public/hot
+public/storage
+
+# IDE e editores
+.vscode
+.idea
+.fleet
+.nova
+.zed
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testes
+tests/
+phpunit.xml
+.phpunit.cache
+
+# Documentação
+README.md
+CHANGELOG.md
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# Docker
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile.dev
+
+# NPM/Yarn
+npm-debug.log
+yarn-error.log
+.npm
+.yarn
+
+# Outros
+*.log
+*.pid
+*.seed
+*.pid.lock
+.nyc_output
+coverage/
+.sass-cache/

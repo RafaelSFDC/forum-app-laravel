@@ -1,0 +1,72 @@
+# Configuração para deploy no Koyeb
+# Este arquivo pode ser usado para configurar o deploy automaticamente
+
+name: forum-app
+
+services:
+  - name: web
+    type: web
+    build:
+      type: docker
+      dockerfile: Dockerfile
+    ports:
+      - port: 8080
+        protocol: http
+    env:
+      - name: APP_NAME
+        value: "Fórum"
+      - name: APP_ENV
+        value: production
+      - name: APP_DEBUG
+        value: "false"
+      - name: APP_URL
+        value: "https://forum-app.koyeb.app"
+      - name: APP_LOCALE
+        value: pt_BR
+      - name: APP_FALLBACK_LOCALE
+        value: en
+      - name: APP_FAKER_LOCALE
+        value: pt_BR
+      - name: LOG_CHANNEL
+        value: stderr
+      - name: LOG_LEVEL
+        value: error
+      - name: DB_CONNECTION
+        value: sqlite
+      - name: DB_DATABASE
+        value: "/var/www/html/database/database.sqlite"
+      - name: CACHE_STORE
+        value: file
+      - name: SESSION_DRIVER
+        value: file
+      - name: SESSION_LIFETIME
+        value: "120"
+      - name: QUEUE_CONNECTION
+        value: database
+      - name: FILESYSTEM_DISK
+        value: local
+      - name: MAIL_MAILER
+        value: log
+      - name: VITE_APP_NAME
+        value: "Fórum"
+    
+    # Configurações de recursos
+    instance_type: nano
+    
+    # Health check
+    health_check:
+      http:
+        path: /health
+        port: 8080
+      initial_delay_seconds: 30
+      timeout_seconds: 10
+      
+    # Configurações de auto-scaling (opcional)
+    autoscaling:
+      min_scale: 1
+      max_scale: 3
+      
+# Configurações de domínio (opcional)
+# domains:
+#   - name: meudominio.com
+#     type: custom
