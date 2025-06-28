@@ -4,13 +4,68 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\PostView;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PostController extends Controller
 {
+    public function create(): Response
+    {
+        $topics = Topic::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+        return Inertia::render('Post/Create', [
+            'topics' => $topics,
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'title' => 'required|string|min:3|max:255',
+            'content' => 'nullable|string|max:10000',
+            'type' => 'required|in:text,link,image',
+            'url' => 'nullable|url|max:500',
+            'image_url' => 'nullable|url|max:500',
+            'topic_id' => 'required|exists:topics,id',
+        ]);
+
+        // Validações específicas por tipo
+        if ($request->type === 'link' && !$request->url) {
+            return back()->withErrors(['url' => 'URL é obrigatória para posts de link.']);
+        }
+
+        if ($request->type === 'image' && !$request->image_url) {
+            return back()->withErrors(['image_url' => 'URL da imagem é obrigatória para posts de imagem.']);
+        }
+
+        if ($request->type === 'text' && !$request->content) {
+            return back()->withErrors(['content' => 'Conteúdo é obrigatório para posts de texto.']);
+        }
+
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'type' => $request->type,
+            'url' => $request->url,
+            'image_url' => $request->image_url,
+            'user_id' => Auth::id(),
+            'topic_id' => $request->topic_id,
+        ]);
+
+        // Incrementar contador de posts no tópico
+        $topic = Topic::find($request->topic_id);
+        $topic->increment('posts_count');
+
+        return redirect()->route('post.show', $post->slug)
+            ->with('success', 'Post criado com sucesso!');
+    }
+
     public function show(string $slug): Response
     {
         $post = Post::with([

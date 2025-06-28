@@ -11,7 +11,6 @@ import {
     Search,
     Plus,
     Bell,
-    MessageSquare,
     Home,
     TrendingUp,
     Menu,
@@ -99,20 +98,21 @@ export function RedditHeader() {
                     {auth.user && (
                         <>
                             {/* Botão Criar Post - Oculto em mobile muito pequeno */}
-                            <Button size="sm" className="hidden md:flex items-center space-x-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full px-3 lg:px-4 text-sm">
-                                <Plus className="h-3 w-3 lg:h-4 lg:w-4" />
-                                <span className="hidden lg:block">Criar</span>
+                            <Button size="sm" className="hidden md:flex items-center space-x-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full px-3 lg:px-4 text-sm" asChild>
+                                <Link href="/posts/create">
+                                    <Plus className="h-3 w-3 lg:h-4 lg:w-4" />
+                                    <span className="hidden lg:block">Criar</span>
+                                </Link>
                             </Button>
 
                             {/* Botão Criar apenas ícone em mobile */}
-                            <Button size="sm" className="md:hidden bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full p-2">
-                                <Plus className="h-4 w-4" />
+                            <Button size="sm" className="md:hidden bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-0 rounded-full p-2" asChild>
+                                <Link href="/posts/create">
+                                    <Plus className="h-4 w-4" />
+                                </Link>
                             </Button>
 
-                            {/* Ícones de Notificação - Ocultos em mobile muito pequeno */}
-                            <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
-                                <MessageSquare className="h-3 w-3 lg:h-4 lg:w-4" />
-                            </Button>
+                            {/* Ícone de Notificação - Oculto em mobile muito pequeno */}
                             <Button variant="ghost" size="icon" className="hidden sm:flex h-7 w-7 lg:h-8 lg:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full">
                                 <Bell className="h-3 w-3 lg:h-4 lg:w-4" />
                             </Button>

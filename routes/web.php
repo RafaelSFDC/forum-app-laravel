@@ -22,6 +22,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+    // Rotas de posts
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+
     // Rotas de votação
     Route::post('/posts/{post}/vote', [VoteController::class, 'votePost'])->name('posts.vote');
     Route::post('/comments/{comment}/vote', [VoteController::class, 'voteComment'])->name('comments.vote');
