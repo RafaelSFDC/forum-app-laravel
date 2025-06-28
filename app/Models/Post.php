@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'title',
         'slug',
@@ -99,5 +101,19 @@ class Post extends Model
     public function scopeRecent($query)
     {
         return $query->orderBy('created_at', 'desc');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', '%' . $search . '%')
+              ->orWhere('content', 'like', '%' . $search . '%')
+              ->orWhereHas('user', function ($userQuery) use ($search) {
+                  $userQuery->where('name', 'like', '%' . $search . '%');
+              })
+              ->orWhereHas('topic', function ($topicQuery) use ($search) {
+                  $topicQuery->where('name', 'like', '%' . $search . '%');
+              });
+        });
     }
 }

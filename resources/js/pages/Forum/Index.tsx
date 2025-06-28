@@ -60,18 +60,25 @@ interface ForumIndexProps {
     topics: Topic[];
     currentSort: string;
     currentTopic?: string;
+    currentSearch?: string;
 }
 
-export default function ForumIndex({ posts, topics, currentSort, currentTopic }: ForumIndexProps) {
+export default function ForumIndex({ posts, topics, currentSort, currentTopic, currentSearch }: ForumIndexProps) {
     const [selectedSort, setSelectedSort] = useState(currentSort);
 
     const handleSortChange = (sort: string) => {
         setSelectedSort(sort);
-        router.get('/', { sort, topic: currentTopic }, { preserveState: true });
+        const params: Record<string, string> = { sort };
+        if (currentTopic) params.topic = currentTopic;
+        if (currentSearch) params.search = currentSearch;
+        router.get('/', params, { preserveState: true });
     };
 
     const handleTopicFilter = (topicSlug?: string) => {
-        router.get('/', { sort: selectedSort, topic: topicSlug }, { preserveState: true });
+        const params: Record<string, string> = { sort: selectedSort };
+        if (topicSlug) params.topic = topicSlug;
+        if (currentSearch) params.search = currentSearch;
+        router.get('/', params, { preserveState: true });
     };
 
     const formatTimeAgo = (dateString: string) => {
@@ -110,7 +117,14 @@ export default function ForumIndex({ posts, topics, currentSort, currentTopic }:
                     <div className="max-w-7xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 lg:space-x-6">
-                                <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Fórum</h1>
+                                <div className="flex flex-col">
+                                    <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Fórum</h1>
+                                    {currentSearch && (
+                                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                            Resultados para: <span className="font-medium">"{currentSearch}"</span>
+                                        </p>
+                                    )}
+                                </div>
                                 <div className="flex items-center space-x-2 sm:space-x-3">
                                     <Filter className="h-3 w-3 sm:h-4 sm:w-4 text-gray-500 flex-shrink-0" />
                                     <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">Ordenar por:</span>

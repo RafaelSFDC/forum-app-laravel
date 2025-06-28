@@ -5,7 +5,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/compon
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { type SharedData } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 import {
     Search,
     Plus,
@@ -22,6 +23,48 @@ export function RedditHeader() {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+
+    const [searchValue, setSearchValue] = useState('');
+    const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+
+    // Obter valor de busca atual da URL
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentSearch = urlParams.get('search') || '';
+        setSearchValue(currentSearch);
+    }, []);
+
+    const handleSearchChange = (value: string) => {
+        setSearchValue(value);
+
+        // Limpar timeout anterior
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        // Definir novo timeout para busca
+        const newTimeout = setTimeout(() => {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (value.trim()) {
+                urlParams.set('search', value.trim());
+            } else {
+                urlParams.delete('search');
+            }
+
+            // Manter outros parâmetros (sort, topic)
+            const sort = urlParams.get('sort') || 'recent';
+            const topic = urlParams.get('topic');
+
+            const params: Record<string, string> = { sort };
+            if (value.trim()) params.search = value.trim();
+            if (topic) params.topic = topic;
+
+            router.get('/', params, { preserveState: true });
+        }, 500); // Debounce de 500ms
+
+        setSearchTimeout(newTimeout);
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 shadow-sm">
@@ -52,7 +95,9 @@ export function RedditHeader() {
                         <Search className="absolute left-2 sm:left-3 top-1/2 h-3 w-3 sm:h-4 sm:w-4 -translate-y-1/2 text-gray-400" />
                         <Input
                             type="search"
-                            placeholder="Buscar..."
+                            placeholder="Buscar posts, usuários, tópicos..."
+                            value={searchValue}
+                            onChange={(e) => handleSearchChange(e.target.value)}
                             className="w-full pl-7 sm:pl-10 h-8 sm:h-9 text-sm bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:bg-white dark:focus:bg-gray-900 focus:border-blue-500 rounded-full"
                         />
                     </div>

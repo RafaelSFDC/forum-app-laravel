@@ -14,9 +14,15 @@ class ForumController extends Controller
     {
         $sort = $request->get('sort', 'recent'); // recent, popular, top
         $topicSlug = $request->get('topic');
+        $search = $request->get('search');
 
         $query = Post::with(['user', 'topic', 'votes'])
             ->published();
+
+        // Filtrar por busca se especificado
+        if ($search) {
+            $query->search($search);
+        }
 
         // Filtrar por tópico se especificado
         if ($topicSlug) {
@@ -39,15 +45,23 @@ class ForumController extends Controller
         }
 
         $posts = $query->paginate(20);
+
+        // Atualizar contadores de posts nos tópicos
         $topics = Topic::where('is_active', true)
+            ->withCount('posts')
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(function ($topic) {
+                $topic->posts_count = $topic->posts_count;
+                return $topic;
+            });
 
         return Inertia::render('Forum/Index', [
             'posts' => $posts,
             'topics' => $topics,
             'currentSort' => $sort,
             'currentTopic' => $topicSlug,
+            'currentSearch' => $search,
         ]);
     }
 }
