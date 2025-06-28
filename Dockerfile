@@ -1,4 +1,4 @@
-# Multi-stage build para aplicação Laravel com React
+# Multi-stage build para otimizar o tamanho da imagem final
 FROM node:22-alpine AS node-builder
 
 WORKDIR /app
@@ -7,10 +7,12 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
+COPY .prettierrc ./
+COPY eslint.config.js ./
 COPY components.json ./
 
 # Instalar dependências do Node.js
-RUN npm ci
+RUN npm ci --omit=dev --silent
 
 # Copiar código fonte do frontend
 COPY resources/ ./resources/
@@ -19,17 +21,17 @@ COPY public/ ./public/
 # Build dos assets
 RUN npm run build
 
-# Stage principal - PHP
-FROM php:8.2-fpm-alpine
+# Stage 2: PHP Runtime
+FROM php:8.4-fpm-alpine AS php-base
 
 # Instalar dependências do sistema
 RUN apk add --no-cache \
     nginx \
     supervisor \
     sqlite \
+    sqlite-dev \
     zip \
     unzip \
-    git \
     curl \
     oniguruma-dev \
     libxml2-dev \
@@ -41,32 +43,28 @@ RUN apk add --no-cache \
 # Instalar extensões PHP
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
-    pdo \
     pdo_sqlite \
+    pdo_mysql \
     mbstring \
     xml \
-    ctype \
-    json \
-    tokenizer \
     zip \
     gd \
-    bcmath
+    opcache
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Criar usuário para a aplicação
-RUN addgroup -g 1000 -S www && \
-    adduser -u 1000 -S www -G www
-
-# Definir diretório de trabalho
+# Configurar diretório de trabalho
 WORKDIR /var/www/html
 
 # Copiar arquivos de dependências do PHP
 COPY composer.json composer.lock ./
 
-# Instalar dependências do PHP
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
+# Instalar dependências do PHP (incluindo dev para seeds, depois remover)
+RUN composer install --optimize-autoloader --no-interaction --prefer-dist --no-scripts
+
+# Stage 3: Final Production Image
+FROM php-base AS production
 
 # Copiar código fonte da aplicação
 COPY . .
@@ -75,20 +73,23 @@ COPY . .
 COPY --from=node-builder /app/public/build ./public/build
 
 # Configurar permissões
-RUN chown -R www:www /var/www/html \
+RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
 # Copiar configurações do Nginx
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/http.d/default.conf
+COPY docker/default-https.conf /etc/nginx/http.d/default.conf
 
 # Copiar configuração do Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Copiar script de entrada
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Copiar script de inicialização
+COPY docker/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Configurar PHP para produção
+COPY docker/php.ini /usr/local/etc/php/conf.d/99-custom.ini
 
 # Criar diretórios necessários
 RUN mkdir -p /var/log/supervisor \
@@ -99,10 +100,7 @@ RUN mkdir -p /var/log/supervisor \
     && mkdir -p /var/www/html/storage/framework/views
 
 # Expor porta
-EXPOSE 8080
+EXPOSE 80
 
-# Definir usuário
-USER www
-
-# Comando de entrada
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Comando de inicialização
+CMD ["/usr/local/bin/start.sh"]

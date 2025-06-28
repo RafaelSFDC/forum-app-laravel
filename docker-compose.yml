@@ -5,8 +5,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: production
     ports:
-      - "8080:8080"
+      - "8080:80"
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
@@ -16,31 +17,37 @@ services:
       - CACHE_STORE=file
       - SESSION_DRIVER=file
       - QUEUE_CONNECTION=database
-      - LOG_CHANNEL=stderr
+      - FORCE_HTTPS=false
+      - FORCE_SEED=true
     volumes:
       - ./storage:/var/www/html/storage
       - ./database:/var/www/html/database
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Serviço opcional para desenvolvimento com banco PostgreSQL
-  # Descomente se quiser usar PostgreSQL em vez de SQLite
-  # db:
-  #   image: postgres:15-alpine
-  #   environment:
-  #     POSTGRES_DB: forum_app
-  #     POSTGRES_USER: forum_user
-  #     POSTGRES_PASSWORD: forum_password
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
-  #   restart: unless-stopped
-
-# volumes:
-#   postgres_data:
+  # Serviço para desenvolvimento (opcional)
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/html/database/database.sqlite
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
+    profiles:
+      - dev
