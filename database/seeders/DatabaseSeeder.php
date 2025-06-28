@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
 
         // Criar usuários adicionais para posts
         User::factory(10)->create();
+
+        // Criar posts de exemplo
+        $this->call(PostSeeder::class);
     }
 }
