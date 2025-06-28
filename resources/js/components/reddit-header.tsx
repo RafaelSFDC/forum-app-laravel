@@ -66,13 +66,13 @@ export function RedditHeader() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b bg-white dark:bg-gray-900 shadow-sm">
+        <header className="sticky top-0 z-50 w-full border-b bg-background shadow-sm">
             <div className="flex h-12 items-center px-2 sm:px-4 max-w-7xl mx-auto">
                 {/* Logo e Nome */}
                 <div className="flex items-center space-x-2 min-w-0 flex-shrink-0">
-                    <Link href="/" className="flex items-center space-x-1 sm:space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md px-1 sm:px-2 py-1 transition-colors">
-                        <AppLogoIcon className="h-6 w-6 sm:h-8 sm:w-8 flex-shrink-0 text-[#FF4500]" />
-                        <span className="hidden sm:block font-bold text-lg sm:text-xl text-[#FF4500]">Fórum</span>
+                    <Link href="/" className="flex items-center space-x-1 sm:space-x-2 hover:bg-muted rounded-md px-1 sm:px-2 py-1 transition-colors">
+                        <AppLogoIcon className="h-6 w-6 sm:h-8 sm:w-8 flex-shrink-0 text-primary" />
+                        <span className="hidden sm:block font-bold text-lg sm:text-xl text-primary">Fórum</span>
                     </Link>
                 </div>
 
@@ -155,7 +155,7 @@ export function RedditHeader() {
                     )}
 
                     {/* Menu Mobile - Mostra navegação em dispositivos pequenos */}
-                    <Button variant="ghost" size="icon" className="lg:hidden h-7 w-7 sm:h-8 sm:w-8 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full ml-1">
+                    <Button variant="ghost" size="icon" className="lg:hidden h-7 w-7 sm:h-8 sm:w-8 hover:bg-muted rounded-full ml-1">
                         <Menu className="h-3 w-3 sm:h-4 sm:w-4" />
                     </Button>
                 </div>

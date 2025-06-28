@@ -36,8 +36,8 @@ export function VoteButtons({
         setIsLoading(true);
 
         try {
-            const endpoint = itemType === 'post' 
-                ? `/posts/${itemId}/vote` 
+            const endpoint = itemType === 'post'
+                ? `/posts/${itemId}/vote`
                 : `/comments/${itemId}/vote`;
 
             const response = await fetch(endpoint, {
@@ -56,7 +56,7 @@ export function VoteButtons({
             if (data.success) {
                 setCurrentVote(data.user_vote);
                 setCurrentCount(data.votes_count);
-                
+
                 // Feedback visual baseado na ação
                 if (data.action === 'created') {
                     toast.success(voteType === 1 ? 'Upvote adicionado!' : 'Downvote adicionado!');
@@ -88,8 +88,8 @@ export function VoteButtons({
                 size="icon"
                 className={cn(
                     buttonSize,
-                    'hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors',
-                    currentVote === 1 && 'bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400',
+                    'hover:bg-primary/10 transition-colors',
+                    currentVote === 1 && 'bg-primary/10 text-primary',
                     isLoading && 'opacity-50 cursor-not-allowed'
                 )}
                 onClick={() => handleVote(1)}
@@ -105,9 +105,9 @@ export function VoteButtons({
             <span className={cn(
                 'font-bold min-w-[2rem] text-center',
                 textSize,
-                currentVote === 1 && 'text-orange-600 dark:text-orange-400',
-                currentVote === -1 && 'text-blue-600 dark:text-blue-400',
-                currentVote === null && 'text-gray-700 dark:text-gray-300'
+                currentVote === 1 && 'text-primary',
+                currentVote === -1 && 'text-accent',
+                currentVote === null && 'text-foreground'
             )}>
                 {currentCount}
             </span>
@@ -118,8 +118,8 @@ export function VoteButtons({
                 size="icon"
                 className={cn(
                     buttonSize,
-                    'hover:bg-blue-100 dark:hover:bg-blue-900/20 transition-colors',
-                    currentVote === -1 && 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
+                    'hover:bg-accent/10 transition-colors',
+                    currentVote === -1 && 'bg-accent/10 text-accent',
                     isLoading && 'opacity-50 cursor-not-allowed'
                 )}
                 onClick={() => handleVote(-1)}

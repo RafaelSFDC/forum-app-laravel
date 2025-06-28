@@ -206,21 +206,21 @@ export function CommentItem({
                             {/* Cabeçalho do comentário */}
                             <div className="flex items-center gap-2 mb-2">
                                 <Avatar className="h-5 w-5">
-                                    <AvatarFallback className="text-xs bg-[#FF4500] text-white">
+                                    <AvatarFallback className="text-xs bg-primary text-primary-foreground">
                                         {getInitials(comment.user.name)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                <span className="text-sm font-medium text-foreground">
                                     u/{comment.user.name}
                                 </span>
-                                <span className="text-xs text-gray-500">•</span>
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-muted-foreground">•</span>
+                                <span className="text-xs text-muted-foreground">
                                     {formatTimeAgo(comment.created_at)}
                                 </span>
                                 {comment.is_deleted && (
                                     <>
-                                        <span className="text-xs text-gray-500">•</span>
-                                        <span className="text-xs text-red-500">removido</span>
+                                        <span className="text-xs text-muted-foreground">•</span>
+                                        <span className="text-xs text-destructive">removido</span>
                                     </>
                                 )}
                             </div>

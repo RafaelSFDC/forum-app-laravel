@@ -275,7 +275,7 @@ export default function PostShow({ post, userVote, auth }: PostShowProps) {
                     <div className="space-y-4">
                         {/* Formulário para novo comentário */}
                         {auth.user ? (
-                            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                            <Card className="bg-card border-border">
                                 <CardContent className="p-4">
                                     <form onSubmit={handleCommentSubmit}>
                                         <div className="mb-3">
@@ -291,7 +291,7 @@ export default function PostShow({ post, userVote, auth }: PostShowProps) {
                                             <Button
                                                 type="submit"
                                                 disabled={!newComment.trim() || isSubmittingComment}
-                                                className="bg-[#FF4500] hover:bg-[#FF4500]/90"
+                                                className="bg-primary hover:bg-primary/90"
                                             >
                                                 {isSubmittingComment ? 'Enviando...' : 'Comentar'}
                                             </Button>
@@ -300,16 +300,16 @@ export default function PostShow({ post, userVote, auth }: PostShowProps) {
                                 </CardContent>
                             </Card>
                         ) : (
-                            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                            <Card className="bg-card border-border">
                                 <CardContent className="p-4 text-center">
-                                    <p className="text-gray-600 dark:text-gray-400 mb-3">
+                                    <p className="text-muted-foreground mb-3">
                                         Faça login para comentar
                                     </p>
                                     <div className="flex justify-center gap-2">
                                         <Button variant="outline" size="sm" asChild>
                                             <Link href="/login">Entrar</Link>
                                         </Button>
-                                        <Button size="sm" className="bg-[#FF4500] hover:bg-[#FF4500]/90" asChild>
+                                        <Button size="sm" className="bg-primary hover:bg-primary/90" asChild>
                                             <Link href="/register">Cadastrar</Link>
                                         </Button>
                                     </div>
@@ -331,10 +331,10 @@ export default function PostShow({ post, userVote, auth }: PostShowProps) {
                                 ))}
                             </div>
                         ) : (
-                            <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                            <Card className="bg-card border-border">
                                 <CardContent className="py-8 text-center">
-                                    <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-                                    <p className="text-gray-500 dark:text-gray-400">
+                                    <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+                                    <p className="text-muted-foreground">
                                         Ainda não há comentários. Seja o primeiro a comentar!
                                     </p>
                                 </CardContent>
