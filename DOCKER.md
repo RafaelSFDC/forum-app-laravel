@@ -1,14 +1,14 @@
-# 🐳 Configuração Docker para Koyeb
+# 🐳 Configuração Docker para Render
 
-Este documento explica como fazer deploy da aplicação no Koyeb usando Docker.
+Este documento explica como fazer deploy da aplicação no Render usando Docker.
 
 ## 📋 Pré-requisitos
 
-- Conta no [Koyeb](https://www.koyeb.com/)
+- Conta no [Render](https://render.com/)
 - Docker instalado localmente (para testes)
 - Código da aplicação no GitHub/GitLab
 
-## 🚀 Deploy no Koyeb
+## 🚀 Deploy no Render
 
 ### 1. Preparar o Repositório
 
@@ -16,29 +16,29 @@ Certifique-se de que todos os arquivos Docker estão commitados:
 
 ```bash
 git add .
-git commit -m "Adicionar configuração Docker para Koyeb"
+git commit -m "Adicionar configuração Docker para Render"
 git push origin main
 ```
 
-### 2. Criar Aplicação no Koyeb
+### 2. Criar Aplicação no Render
 
-1. Acesse o [Koyeb Dashboard](https://app.koyeb.com/)
-2. Clique em "Create App"
-3. Selecione "GitHub" como fonte
-4. Conecte seu repositório
+1. Acesse o [Render Dashboard](https://dashboard.render.com/)
+2. Clique em "New +"
+3. Selecione "Web Service"
+4. Conecte seu repositório GitHub
 5. Configure as seguintes opções:
 
 #### Configurações Básicas:
 - **Build method**: Docker
 - **Dockerfile path**: `Dockerfile`
-- **Port**: `8080`
+- **Port**: `80`
 
 #### Variáveis de Ambiente:
 ```
-APP_NAME=Fórum
+APP_NAME=Forum App
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://your-app-name.koyeb.app
+APP_URL=https://forum-laravel-app.onrender.com
 APP_KEY=base64:GENERATED_KEY_HERE
 DB_CONNECTION=sqlite
 DB_DATABASE=/var/www/html/database/database.sqlite
@@ -52,7 +52,7 @@ QUEUE_CONNECTION=database
 
 - Na aba "Settings" da aplicação
 - Adicione seu domínio customizado
-- Configure o DNS conforme instruções do Koyeb
+- Configure o DNS conforme instruções do Render
 
 ## 🧪 Testar Localmente
 
@@ -86,13 +86,13 @@ docker run -p 8080:8080 \
 A aplicação inclui um endpoint de health check em `/health`
 
 ### Logs
-Para visualizar logs no Koyeb:
+Para visualizar logs no Render:
 1. Acesse sua aplicação no dashboard
 2. Vá para a aba "Logs"
 3. Monitore logs em tempo real
 
 ### Métricas
-O Koyeb fornece métricas automáticas:
+O Render fornece métricas automáticas:
 - CPU usage
 - Memory usage
 - Request rate
@@ -104,7 +104,7 @@ O Koyeb fornece métricas automáticas:
 
 Para usar PostgreSQL em vez de SQLite:
 
-1. Adicione um serviço PostgreSQL no Koyeb
+1. Adicione um serviço PostgreSQL no Render
 2. Configure as variáveis de ambiente:
 
 ```
@@ -148,7 +148,7 @@ REDIS_PASSWORD=your-redis-password
 
 2. **Erro de chave da aplicação**:
    - Gere uma nova chave: `php artisan key:generate`
-   - Adicione nas variáveis de ambiente do Koyeb
+   - Adicione nas variáveis de ambiente do Render
 
 3. **Erro de banco de dados**:
    - Verifique se as migrações foram executadas
@@ -192,6 +192,6 @@ docker build --no-cache -t forum-app .
 ## 📞 Suporte
 
 Se encontrar problemas:
-1. Verifique os logs no Koyeb Dashboard
+1. Verifique os logs no Render Dashboard
 2. Teste localmente com Docker
-3. Consulte a [documentação do Koyeb](https://www.koyeb.com/docs)
+3. Consulte a [documentação do Render](https://render.com/docs)

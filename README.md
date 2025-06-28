@@ -184,13 +184,13 @@ php artisan queue:work
 
 ## 🐳 Deploy com Docker
 
-Este projeto inclui configuração completa para Docker e deploy no Koyeb:
+Este projeto inclui configuração completa para Docker e deploy no Render:
 
-### Deploy no Koyeb
+### Deploy no Render
 ```bash
 # Executar script de deploy
-chmod +x scripts/deploy-koyeb.sh
-./scripts/deploy-koyeb.sh
+chmod +x scripts/deploy.sh
+./scripts/deploy.sh
 ```
 
 ### Teste Local com Docker
@@ -237,7 +237,7 @@ forum-app/
 ├── tests/                 # Testes automatizados
 ├── Dockerfile             # Configuração Docker
 ├── docker-compose.yml     # Docker Compose
-└── koyeb.yml             # Configuração Koyeb
+└── render.yaml           # Configuração Render
 ```
 
 ## 🤝 Contribuição

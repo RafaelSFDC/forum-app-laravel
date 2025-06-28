@@ -36,18 +36,18 @@ npm run format
 
 # Build local para testar
 echo "🏗️ Construindo imagem de produção..."
-docker build -t blog-fanfic:prod .
+docker build -t forum-app:prod .
 
 # Testar se a imagem funciona
 echo "🧪 Testando container de produção..."
-docker run --rm -d --name blog-fanfic-prod-test \
+docker run --rm -d --name forum-app-prod-test \
     -p 8082:80 \
     -e APP_ENV=production \
     -e APP_DEBUG=false \
-    -e APP_URL=https://blog-fanfic.onrender.com \
+    -e APP_URL=https://forum-laravel-app.onrender.com \
     -e FORCE_HTTPS=true \
     -e FORCE_SEED=true \
-    blog-fanfic:prod
+    forum-app:prod
 
 # Aguardar o container inicializar
 echo "⏳ Aguardando inicialização..."
@@ -60,14 +60,14 @@ if curl -f http://localhost:8082/health > /dev/null 2>&1; then
 else
     echo "❌ Health check falhou!"
     echo "📋 Logs do container:"
-    docker logs blog-fanfic-prod-test
-    docker stop blog-fanfic-prod-test
+    docker logs forum-app-prod-test
+    docker stop forum-app-prod-test
     exit 1
 fi
 
 # Verificar se os seeds foram executados
 echo "🌱 Verificando execução dos seeds..."
-docker exec blog-fanfic-prod-test ls -la /var/www/html/storage/.seeded > /dev/null 2>&1
+docker exec forum-app-prod-test ls -la /var/www/html/storage/.seeded > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     echo "✅ Seeds foram executados com sucesso!"
 else
@@ -75,10 +75,10 @@ else
 fi
 
 # Parar container de teste
-docker stop blog-fanfic-prod-test
+docker stop forum-app-prod-test
 
 # Limpar imagem de teste
-docker rmi blog-fanfic:prod
+docker rmi forum-app:prod
 
 echo "✅ Testes de produção passaram!"
 
@@ -114,7 +114,7 @@ git push
 echo ""
 echo "✅ Deploy para produção concluído!"
 echo "🌐 Acesse: https://dashboard.render.com para acompanhar o progresso"
-echo "📱 URL da aplicação: https://blog-fanfic.onrender.com"
+echo "📱 URL da aplicação: https://forum-laravel-app.onrender.com"
 echo ""
 echo "📋 Configurações aplicadas:"
 echo "   ✓ HTTPS forçado em produção"

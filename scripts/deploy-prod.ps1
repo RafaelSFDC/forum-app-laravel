@@ -53,7 +53,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Build local para testar
 Write-Host "🏗️ Construindo imagem de produção..." -ForegroundColor Yellow
-docker build -t blog-fanfic:prod .
+docker build -t forum-app:prod .
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Erro no build da imagem Docker" -ForegroundColor Red
     exit 1
@@ -61,14 +61,14 @@ if ($LASTEXITCODE -ne 0) {
 
 # Testar se a imagem funciona
 Write-Host "🧪 Testando container de produção..." -ForegroundColor Yellow
-$containerId = docker run --rm -d --name blog-fanfic-prod-test `
+$containerId = docker run --rm -d --name forum-app-prod-test `
     -p 8082:80 `
     -e APP_ENV=production `
     -e APP_DEBUG=false `
-    -e APP_URL=https://blog-fanfic.onrender.com `
+    -e APP_URL=https://forum-laravel-app.onrender.com `
     -e FORCE_HTTPS=true `
     -e FORCE_SEED=true `
-    blog-fanfic:prod
+    forum-app:prod
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Erro ao iniciar container de teste" -ForegroundColor Red
@@ -91,26 +91,26 @@ try {
 } catch {
     Write-Host "❌ Health check falhou!" -ForegroundColor Red
     Write-Host "📋 Logs do container:" -ForegroundColor Yellow
-    docker logs blog-fanfic-prod-test
-    docker stop blog-fanfic-prod-test
-    docker rmi blog-fanfic:prod
+    docker logs forum-app-prod-test
+    docker stop forum-app-prod-test
+    docker rmi forum-app:prod
     exit 1
 }
 
 # Verificar se os seeds foram executados
 Write-Host "🌱 Verificando execução dos seeds..." -ForegroundColor Yellow
 try {
-    docker exec blog-fanfic-prod-test ls -la /var/www/html/storage/.seeded | Out-Null
+    docker exec forum-app-prod-test ls -la /var/www/html/storage/.seeded | Out-Null
     Write-Host "✅ Seeds foram executados com sucesso!" -ForegroundColor Green
 } catch {
     Write-Host "⚠️ Seeds podem não ter sido executados" -ForegroundColor Yellow
 }
 
 # Parar container de teste
-docker stop blog-fanfic-prod-test | Out-Null
+docker stop forum-app-prod-test | Out-Null
 
 # Limpar imagem de teste
-docker rmi blog-fanfic:prod | Out-Null
+docker rmi forum-app:prod | Out-Null
 
 Write-Host "✅ Testes de produção passaram!" -ForegroundColor Green
 
@@ -158,7 +158,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host ""
 Write-Host "✅ Deploy para produção concluído!" -ForegroundColor Green
 Write-Host "🌐 Acesse: https://dashboard.render.com para acompanhar o progresso" -ForegroundColor Cyan
-Write-Host "📱 URL da aplicação: https://blog-fanfic.onrender.com" -ForegroundColor Cyan
+Write-Host "📱 URL da aplicação: https://forum-laravel-app.onrender.com" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "📋 Configurações aplicadas:" -ForegroundColor Yellow
 Write-Host "   ✓ HTTPS forçado em produção" -ForegroundColor Green

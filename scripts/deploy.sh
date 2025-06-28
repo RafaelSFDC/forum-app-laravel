@@ -38,11 +38,11 @@ npm run format
 
 # Build local para testar
 echo "🏗️ Testando build local..."
-docker build -t blog-fanfic:test .
+docker build -t forum-app:test .
 
 # Testar se a imagem funciona
 echo "🧪 Testando container..."
-docker run --rm -d --name blog-fanfic-test -p 8081:80 blog-fanfic:test
+docker run --rm -d --name forum-app-test -p 8081:80 forum-app:test
 
 # Aguardar o container inicializar
 sleep 10
@@ -52,13 +52,13 @@ if curl -f http://localhost:8081/health > /dev/null 2>&1; then
     echo "✅ Health check passou!"
 else
     echo "❌ Health check falhou!"
-    docker logs blog-fanfic-test
-    docker stop blog-fanfic-test
+    docker logs forum-app-test
+    docker stop forum-app-test
     exit 1
 fi
 
 # Parar container de teste
-docker stop blog-fanfic-test
+docker stop forum-app-test
 
 # Adicionar mudanças ao Git
 echo "📝 Adicionando mudanças ao Git..."
@@ -80,7 +80,7 @@ git push
 
 echo "✅ Deploy preparado! O Render.com irá automaticamente fazer o deploy da nova versão."
 echo "🌐 Acesse: https://dashboard.render.com para acompanhar o progresso"
-echo "📱 URL da aplicação: https://blog-fanfic.onrender.com"
+echo "📱 URL da aplicação: https://forum-laravel-app.onrender.com"
 echo ""
 echo "🌱 Seeds serão executados automaticamente no primeiro deploy"
 echo "🔧 Para forçar re-execução dos seeds, defina FORCE_SEED=true no Render.com"
