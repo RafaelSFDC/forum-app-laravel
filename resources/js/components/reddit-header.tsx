@@ -17,7 +17,7 @@ import {
     Menu,
     ChevronDown
 } from 'lucide-react';
-import RedditLogo from './reddit-logo';
+import AppLogoIcon from './app-logo-icon';
 
 export function RedditHeader() {
     const page = usePage<SharedData>();
@@ -72,8 +72,8 @@ export function RedditHeader() {
                 {/* Logo e Nome */}
                 <div className="flex items-center space-x-2 min-w-0 flex-shrink-0">
                     <Link href="/" className="flex items-center space-x-1 sm:space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md px-1 sm:px-2 py-1 transition-colors">
-                        <RedditLogo className="h-6 w-6 sm:h-8 sm:w-8 flex-shrink-0" />
-                        <span className="hidden sm:block font-bold text-lg sm:text-xl text-[#FF4500]">reddit</span>
+                        <AppLogoIcon className="h-6 w-6 sm:h-8 sm:w-8 flex-shrink-0 text-[#FF4500]" />
+                        <span className="hidden sm:block font-bold text-lg sm:text-xl text-[#FF4500]">Fórum</span>
                     </Link>
                 </div>
 
